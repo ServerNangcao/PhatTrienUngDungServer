@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BuildingBlocks\Ticketing.SharedKernel\Ticketing.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Ticketing.Infrastructure.Core\Ticketing.Infrastructure.Core.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Contracts\Notifications.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Internal\Notifications.Internal.csproj" />
+  </ItemGroup>
+
+</Project>

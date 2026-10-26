@@ -1,0 +1,31 @@
+## .NET build artifacts
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+## IDE & Editors
+.vs/
+.vscode/
+.idea/
+
+## Node / Frontend
+node_modules/
+dist/
+
+## Environment & Secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+## Agent configs & workflows
+.agents/
+.agent/
+
+## Markdown docs (except README.md)
+*.md
+docs/**/*.md
+!README.md

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Contracts -->
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Contracts\Identity.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Events\Events.Contracts\Events.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Ticketing\Ticketing.Contracts\Ticketing.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Orders\Orders.Contracts\Orders.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\CheckIn\CheckIn.Contracts\CheckIn.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Contracts\Notifications.Contracts.csproj" />
+
+    <!-- Internal (InternalsVisibleTo đã khai báo trong mỗi Internal.csproj) -->
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Internal\Identity.Internal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Events\Events.Internal\Events.Internal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Ticketing\Ticketing.Internal\Ticketing.Internal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Orders\Orders.Internal\Orders.Internal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\CheckIn\CheckIn.Internal\CheckIn.Internal.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Internal\Notifications.Internal.csproj" />
+  </ItemGroup>
+
+</Project>

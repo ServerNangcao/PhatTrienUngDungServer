@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Ticketing.Internal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ticketing.Contracts\Ticketing.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Ticketing.SharedKernel\Ticketing.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Ticketing.Infrastructure.Core\Ticketing.Infrastructure.Core.csproj" />
+    <ProjectReference Include="..\..\Events\Events.Contracts\Events.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Ticketing.Tests" />
+    <InternalsVisibleTo Include="Architecture.Tests" />
+    <InternalsVisibleTo Include="Integration.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+</Project>

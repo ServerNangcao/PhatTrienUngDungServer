@@ -1,0 +1,109 @@
+# ──────────────────────────────────────────────────────────
+# Docker Compose — Ticketing Modular Monolith
+# Dev profile: bao gồm MinIO cho object storage
+# Giới hạn bộ nhớ theo điểm 8 trong kế hoạch kiến trúc
+# ──────────────────────────────────────────────────────────
+
+services:
+  # ─── PostgreSQL ───
+  ticketing-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ticketing}
+      POSTGRES_USER: ${POSTGRES_USER:-ticketing_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMeInProduction!}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ticketing_app} -d ${POSTGRES_DB:-ticketing}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis ───
+  ticketing-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: >
+      redis-server
+      --maxmemory 100mb
+      --maxmemory-policy allkeys-lru
+      --save ""
+      --appendonly no
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── MinIO (dev only — S3-compatible object storage) ───
+  ticketing-minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3__AccessKey:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3__SecretKey:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Backend API ───
+  ticketing-api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=ticketing-db;Port=5432;Database=${POSTGRES_DB:-ticketing};Username=${POSTGRES_USER:-ticketing_app};Password=${POSTGRES_PASSWORD:-ChangeMeInProduction!}
+      ConnectionStrings__Redis: ticketing-redis:6379
+      ConnectionStrings__Hangfire: Host=ticketing-db;Port=5432;Database=${POSTGRES_DB:-ticketing};Username=${POSTGRES_USER:-ticketing_app};Password=${POSTGRES_PASSWORD:-ChangeMeInProduction!}
+      Jwt__Secret: ${Jwt__Secret:-SuperSecretKeyAtLeast32Characters!!}
+      Jwt__Issuer: ${Jwt__Issuer:-ticketing-api}
+      Jwt__Audience: ${Jwt__Audience:-ticketing-client}
+      S3__ServiceUrl: http://ticketing-minio:9000
+      S3__AccessKey: ${S3__AccessKey:-minioadmin}
+      S3__SecretKey: ${S3__SecretKey:-minioadmin}
+      S3__BucketName: ${S3__BucketName:-ticketing}
+      S3__ForcePathStyle: "true"
+    depends_on:
+      ticketing-db:
+        condition: service_healthy
+      ticketing-redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 640M
+
+volumes:
+  pgdata:
+  miniodata:

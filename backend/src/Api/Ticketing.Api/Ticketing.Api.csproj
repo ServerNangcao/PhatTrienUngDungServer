@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <RootNamespace>Ticketing.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- BuildingBlocks -->
+    <ProjectReference Include="..\..\BuildingBlocks\Ticketing.SharedKernel\Ticketing.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Ticketing.Infrastructure.Core\Ticketing.Infrastructure.Core.csproj" />
+
+    <!-- Module Contracts (để biết interface khi cần) -->
+    <ProjectReference Include="..\..\Modules\Identity\Identity.Contracts\Identity.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Events\Events.Contracts\Events.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Ticketing\Ticketing.Contracts\Ticketing.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Orders\Orders.Contracts\Orders.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\CheckIn\CheckIn.Contracts\CheckIn.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Notifications\Notifications.Contracts\Notifications.Contracts.csproj" />
+
+    <!-- Module Internal (để gọi AddXxxModule / MapXxxEndpoints) -->
+    <ProjectReference Include="..\..\Modules\Identity\Identity.Internal\Identity.Internal.csproj" />
+    <ProjectReference Include="..\..\Modules\Events\Events.Internal\Events.Internal.csproj" />
+    <ProjectReference Include="..\..\Modules\Ticketing\Ticketing.Internal\Ticketing.Internal.csproj" />
+    <ProjectReference Include="..\..\Modules\Orders\Orders.Internal\Orders.Internal.csproj" />
+    <ProjectReference Include="..\..\Modules\CheckIn\CheckIn.Internal\CheckIn.Internal.csproj" />
+    <ProjectReference Include="..\..\Modules\Notifications\Notifications.Internal\Notifications.Internal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
+  </ItemGroup>
+
+</Project>
